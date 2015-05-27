@@ -1,0 +1,10 @@
+0. git clone [url]                 -              clone the repository
+1.  cd ..                                -              advance up in the folder hierrarchy
+2. cd [folder]                      -              move inside a certain folder inside the current directory
+3. ls                                     -              show all items in current directory
+4. git status                        -              shows whats the difference between us and github
+5. git add [item]                 -              add items to git (makes changes to be commited)
+6. git commit                     -              commit the changes
+7. git commit -m [string]   -             commit with a message
+8. git push                          -              pushes from our machine to github
+9. git pull                           -               pulls from github
