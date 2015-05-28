@@ -17,7 +17,7 @@ namespace TeamWork.Objects
         }
 
         private ObjectType objectType;
-        private int lifeOnScreen; // "Frames" on screen
+        private int _lifeOnScreen; // "Frames" on screen
 
         /// <summary>
         /// BossObject constructor created with starting coordinate(Point2D) and type number 0-3
@@ -34,19 +34,19 @@ namespace TeamWork.Objects
             switch (objectType)
             {
                 case ObjectType.Rocket:
-                    lifeOnScreen = 45;
+                    _lifeOnScreen = 45;
                     break;
                 case ObjectType.Bullet:
-                    lifeOnScreen = 60;
+                    _lifeOnScreen = 60;
                     break;
                 case ObjectType.Laser:
-                    lifeOnScreen = 20;
+                    _lifeOnScreen = 20;
                     break;
                 case ObjectType.Mine:
-                    lifeOnScreen = 30;
+                    _lifeOnScreen = 30;
                     break;
                 case ObjectType.SoundWave:
-                    lifeOnScreen = 15;
+                    _lifeOnScreen = 15;
                     break;
             }
         }
@@ -59,7 +59,7 @@ namespace TeamWork.Objects
         /// <returns>int</returns>
         public int GetLifeOnScreen()
         {
-            return lifeOnScreen;
+            return _lifeOnScreen;
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace TeamWork.Objects
         public override string ToString()
         {
             return string.Format("X:{0} Y:{1}\nLife on screen Left:{2}\nType:{3}", this.Point.X, this.Point.Y,
-                this.lifeOnScreen, this.objectType);
+                this._lifeOnScreen, this.objectType);
         }
 
         #endregion
@@ -88,7 +88,7 @@ namespace TeamWork.Objects
         /// </summary>
         public void MoveObject()
         {
-            int direction = Engine.rnd.Next(1, 4); // Random number, that defines the movement of some object types
+            int direction = Engine.Rnd.Next(1, 4); // Random number, that defines the movement of some object types
             switch (objectType)
             {
 
@@ -100,18 +100,18 @@ namespace TeamWork.Objects
                     {
                         this.Point.X--;
                         this.Point.Y--;
-                        lifeOnScreen--;
+                        _lifeOnScreen--;
                     }
                     if (direction == 2)
                     {
                         this.Point.X--;
-                        lifeOnScreen--;
+                        _lifeOnScreen--;
                     }
                     if (direction == 3)
                     {
                         this.Point.X--;
                         this.Point.Y++;
-                        lifeOnScreen--;
+                        _lifeOnScreen--;
                     }
                     break;
 
@@ -122,7 +122,7 @@ namespace TeamWork.Objects
                     #region Bullet Movement
                     // Standard bullet movement
                     this.Point.X -= 2;
-                    lifeOnScreen -= 2;
+                    _lifeOnScreen -= 2;
                     break;
 
                     #endregion
@@ -131,9 +131,9 @@ namespace TeamWork.Objects
 
                     #region Laser Movement
                     
-                    if (lifeOnScreen > 8) // Laser chargeup "effect"
+                    if (_lifeOnScreen > 8) // Laser chargeup "effect"
                     {
-                        if (lifeOnScreen%2 == 0)
+                        if (_lifeOnScreen%2 == 0)
                         {
                             this.Point.Y--;
                         }
@@ -142,7 +142,7 @@ namespace TeamWork.Objects
                             this.Point.Y++;
                         }
                     }
-                    this.lifeOnScreen--;
+                    this._lifeOnScreen--;
                     break;
 
                     #endregion
@@ -152,71 +152,71 @@ namespace TeamWork.Objects
                     #region Mine Movement
 
                     // Mine object movement, different "speeds" and movements based on the objects left lifeOnScreen value
-                    if (lifeOnScreen > 25)
+                    if (_lifeOnScreen > 25)
                     {
                         if (direction == 1)
                         {
                             this.Point.X -= 6;
                             this.Point.Y -= 2;
-                            lifeOnScreen--;
+                            _lifeOnScreen--;
                         }
                         if (direction == 2)
                         {
                             this.Point.X -= 6;
-                            lifeOnScreen--;
+                            _lifeOnScreen--;
                         }
                         if (direction == 3)
                         {
                             this.Point.X -= 6;
                             this.Point.Y += 2;
-                            lifeOnScreen--;
+                            _lifeOnScreen--;
                         }
                     }
-                    else if (lifeOnScreen > 15)
+                    else if (_lifeOnScreen > 15)
                     {
                         if (direction == 1)
                         {
                             this.Point.X -= 3;
                             this.Point.Y -= 1;
-                            lifeOnScreen--;
+                            _lifeOnScreen--;
                         }
                         if (direction == 2)
                         {
                             this.Point.X -= 3;
-                            lifeOnScreen--;
+                            _lifeOnScreen--;
                         }
                         if (direction == 3)
                         {
                             this.Point.X -= 3;
                             this.Point.Y += 1;
-                            lifeOnScreen--;
+                            _lifeOnScreen--;
                         }
                     }
-                    else if (lifeOnScreen >= 10)
+                    else if (_lifeOnScreen >= 10)
                     {
 
-                        if (lifeOnScreen%2 == 0)
+                        if (_lifeOnScreen%2 == 0)
                         {
                             if (direction == 1)
                             {
                                 this.Point.X--;
                                 this.Point.Y--;
-                                lifeOnScreen--;
+                                _lifeOnScreen--;
                             }
                             if (direction == 2)
                             {
                                 this.Point.X--;
-                                lifeOnScreen--;
+                                _lifeOnScreen--;
                             }
                             if (direction == 3)
                             {
                                 this.Point.X--;
                                 this.Point.Y++;
-                                lifeOnScreen--;
+                                _lifeOnScreen--;
                             }
                         }
                     }
-                    lifeOnScreen--;
+                    _lifeOnScreen--;
                     break;
 
                     #endregion
@@ -226,7 +226,7 @@ namespace TeamWork.Objects
                     #region Soundwave Movement
 
                     this.Point.X--;
-                    lifeOnScreen--;
+                    _lifeOnScreen--;
                     break;
 
                     #endregion
@@ -270,9 +270,9 @@ namespace TeamWork.Objects
 
                     #region Laser Print
 
-                    if (this.lifeOnScreen > 8) // Print chargeup effect
+                    if (this._lifeOnScreen > 8) // Print chargeup effect
                     {
-                        Engine.boss.movealbe = false; // Make the boss imovable while printing the chargeup effect
+                        Engine.boss.Movealbe = false; // Make the boss imovable while printing the chargeup effect
                         Printing.DrawAtBG(this.Point.X + 5, this.Point.Y - 1, @"<----.     __ / __   \",
                             ConsoleColor.DarkGray);
                         Printing.DrawAtBG(this.Point.X + 5, this.Point.Y, @"<----|====O)))==) \) /", ConsoleColor.Gray);
@@ -296,9 +296,9 @@ namespace TeamWork.Objects
                                 break;
                             }
                         }
-                        if (lifeOnScreen < 1) // When the laser animation stops, make the boss moveable again
+                        if (_lifeOnScreen < 1) // When the laser animation stops, make the boss moveable again
                         {
-                            Engine.boss.movealbe = true;
+                            Engine.boss.Movealbe = true;
                         }
                     }
                     break;
@@ -309,7 +309,7 @@ namespace TeamWork.Objects
 
                     #region Mine Print
 
-                    if (this.lifeOnScreen > 6) // Standard print
+                    if (this._lifeOnScreen > 6) // Standard print
                     {
                         Printing.DrawAt(this.Point.X, this.Point.Y - 1, " \u25B2", ConsoleColor.Yellow);
                         Printing.DrawAt(this.Point, "\u25C4\u25A0\u25BA", ConsoleColor.Yellow);
@@ -391,7 +391,7 @@ namespace TeamWork.Objects
                         Engine.Player.ShipCollided(Point.X, Point.Y - 1))
                     {
                         // If theres a collision, set this object lifeonscreen to zero
-                        this.lifeOnScreen = 0;
+                        this._lifeOnScreen = 0;
                     }
                     break;
 
@@ -404,7 +404,7 @@ namespace TeamWork.Objects
                     Printing.DrawAt(this.Point, "  ");
                     if (Engine.Player.ShipCollided(this.Point))
                     {
-                        this.lifeOnScreen = 0;
+                        this._lifeOnScreen = 0;
                     }
                     break;
 
@@ -414,7 +414,7 @@ namespace TeamWork.Objects
 
                     #region Laser Clear
 
-                    if (this.lifeOnScreen > 5)
+                    if (this._lifeOnScreen > 5)
                     {
                         Printing.DrawAt(this.Point.X, this.Point.Y - 2, "                      ");
                         Printing.DrawAt(this.Point.X, this.Point.Y - 1, "                      ");
@@ -438,7 +438,7 @@ namespace TeamWork.Objects
 
                     #region Mine Clear
 
-                    if (this.lifeOnScreen > 6)
+                    if (this._lifeOnScreen > 6)
                     {
                         Printing.DrawAt(this.Point.X, this.Point.Y - 1, "  ");
                         Printing.DrawAt(this.Point, "   ");

@@ -98,27 +98,27 @@ namespace TeamWork.Objects
             {
                 case ObjectType.Normal:
                     life = 2;
-                    base.Point = new Point2D(Engine.WindowWidth - 2, Engine.rnd.Next(6, Engine.WindowHeight - 3));
+                    base.Point = new Point2D(Engine.WindowWidth - 2, Engine.Rnd.Next(6, Engine.WindowHeight - 3));
                     break;
                 case ObjectType.Small:
                     life = 1;
-                    base.Point = new Point2D(Engine.WindowWidth - 1, Engine.rnd.Next(4, Engine.WindowHeight - 2));
+                    base.Point = new Point2D(Engine.WindowWidth - 1, Engine.Rnd.Next(4, Engine.WindowHeight - 2));
                     break;
                 case ObjectType.Silver:
                     life = 4;
-                    base.Point = new Point2D(Engine.WindowWidth - 3, Engine.rnd.Next(3, Engine.WindowHeight - 4));
+                    base.Point = new Point2D(Engine.WindowWidth - 3, Engine.Rnd.Next(3, Engine.WindowHeight - 4));
                     break;
                 case ObjectType.Gold:
                     life = 3;
-                    base.Point = new Point2D(Engine.WindowWidth - 3, Engine.rnd.Next(3, Engine.WindowHeight - 4));
+                    base.Point = new Point2D(Engine.WindowWidth - 3, Engine.Rnd.Next(3, Engine.WindowHeight - 4));
                     break;
                 case ObjectType.Lenghty:
                     life = 3;
-                    base.Point = new Point2D(Engine.WindowWidth - 3, Engine.rnd.Next(4, Engine.WindowHeight - 3));
+                    base.Point = new Point2D(Engine.WindowWidth - 3, Engine.Rnd.Next(4, Engine.WindowHeight - 3));
                     break;
                 case ObjectType.Quadcopter:
                     life = 7;
-                    base.Point = new Point2D(Engine.WindowWidth - 2, Engine.rnd.Next(6, Engine.WindowHeight - 4));
+                    base.Point = new Point2D(Engine.WindowWidth - 2, Engine.Rnd.Next(6, Engine.WindowHeight - 4));
                     break;
             }
         }
@@ -140,7 +140,7 @@ namespace TeamWork.Objects
         private Point2D downRight; // down Right Diagonal point storage for explosion effect
         
         private int projectileCounter = 1; // Counter to check with if the Quadcopter should fire 
-        private int projectileChance = Engine.rnd.Next(20, 50); // Random chance that quadcopters will fire a bullet
+        private int projectileChance = Engine.Rnd.Next(20, 50); // Random chance that quadcopters will fire a bullet
         
         public bool GotHit = false; //Toggle that helps with the explosion animation
         /// <summary>

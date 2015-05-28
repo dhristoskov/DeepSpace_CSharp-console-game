@@ -6,7 +6,7 @@ namespace TeamWork
 {
     public class Player : Entity, IPlayer
     {
-        private int lives = 5;
+        private int lives = 3;
         private int score = 0;
         private int level = 1;
 
@@ -107,6 +107,11 @@ namespace TeamWork
         {
             this.Score++;
             Engine.Player.Level = Engine.Player.Score/ 50 + 1;
+            if (Engine.Player.Level > 1)
+            {
+                // Set players difficulty
+                Engine.Chance = Engine.StartingDifficulty - Engine.Player.Level * 2;
+            }
         }
 
         /// <summary>

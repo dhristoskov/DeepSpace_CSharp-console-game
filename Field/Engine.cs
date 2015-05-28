@@ -10,10 +10,11 @@ namespace TeamWork.Field
 {
     public class Engine
     {
-        public static Random rnd = new Random();
+        public static Random Rnd = new Random();
         public static Player Player = new Player();
-        public bool drawMenu = false;
-        public Thread musicThread; // Background music thread
+        public bool DrawMenu = false;
+        public const int StartingDifficulty = 40;
+        public Thread MusicThread; // Background music thread
         public Thread EffectsThread; // Effects music thread
 
         public const int WindowWidth = 80; //Window Width constant to be accesed from everywhere
@@ -35,8 +36,8 @@ namespace TeamWork.Field
             // Starting manu and intro screens
             Menu.StartMenu();
             // Starting main's music thread
-            musicThread = new Thread(Engine.LoadMusic);
-            musicThread.Start();
+            MusicThread = new Thread(LoadMusic);
+            MusicThread.Start();
             // Starting effects music thread
             EffectsThread = new Thread(SoundEffects);
             EffectsThread.Start();
@@ -82,11 +83,11 @@ namespace TeamWork.Field
         /// </summary>
         private void UpdateAndRender()
         {
-            if (Player.Level == 2 && BossActive == false) // When to spawn a boss
+            if (Player.Level % 3 == 2 && BossActive == false) // When to spawn a boss
             {
                 BossActive = true;
                 
-                if (boss.bossLife <= 0)
+                if (boss.BossLife <= 0)
                 {
                     boss = new Boss(0);
                 }
@@ -148,7 +149,7 @@ namespace TeamWork.Field
                 case ConsoleKey.Spacebar:
                     // Add a GameObject to the bullet list with starting position of the players plane nose with type of bullet
                     _bullets.Add(new GameObject(new Point2D(Player.Point.X + 20, Player.Point.Y + 1),0));
-                    playEffect = true; // Play player shooting sound
+                    _playEffect = true; // Play player shooting sound
                     break;
             }
         }
@@ -214,19 +215,19 @@ namespace TeamWork.Field
         /// Generate meteorObjects
         /// </summary>
         private List<GameObject> _meteorits = new List<GameObject>();
-        private int counter = 0; // Just a counter
-        public int chance = 40; // Chance variable 1 per # loops spawn a meteor
+        private int _counter = 0; // Just a counter
+        public static int Chance = StartingDifficulty; // Chance variable 1 per # loops spawn a meteor
         private void GenerateMeteorit()
         {
-            if (counter % chance == 0)
+            if (_counter % Chance == 0)
             {
                 // When its time to spawn a meteorit , random its type
-                _meteorits.Add(new GameObject(rnd.Next(1, 7)));
-                counter++;
+                _meteorits.Add(new GameObject(Rnd.Next(1, 7)));
+                _counter++;
             }
             else
             {
-                counter++;
+                _counter++;
             }
         }
 
@@ -236,7 +237,7 @@ namespace TeamWork.Field
         private void DrawAndMoveMeteor()
         {
             List<GameObject> newMeteorits = new List<GameObject>();
-            if (counter % 1 == 0) // Can be used to make the meteors move slower
+            if (_counter % 1 == 0) // Can be used to make the meteors move slower
             {
                 for (int i = 0; i < _meteorits.Count; i++) // Cycle through all meteorits
                 {
@@ -254,7 +255,7 @@ namespace TeamWork.Field
                             if (--_meteorits[i].life == 0) // Check if the decreased meteorits life is 0
                             {
                                 _meteorits[i].ClearObject(); // Clear the meteorit
-                                playMeteorEffect = true; // Play meteorit explosion effect
+                                _playMeteorEffect = true; // Play meteorit explosion effect
                                 _meteorits[i].GotHit = true; // Tag the meteorit as hitted
                             }
 
@@ -303,7 +304,7 @@ namespace TeamWork.Field
         /// </summary>
         /// <param name="obj"></param>
         /// <returns>If ship was struck by meteorite</returns>
-        private bool ShipCollision(GameObject obj)
+        private static bool ShipCollision(GameObject obj)
         {
             Point2D point = Player.Point;
             if (obj.Collided(point.X + 21, point.Y) || obj.Collided(point.X + 21, point.Y + 1) || // Front collision
@@ -325,7 +326,7 @@ namespace TeamWork.Field
         /// <summary>
         /// Projectile collision check
         /// </summary>
-        private void ProjectileCollisionCheck()
+        private static void ProjectileCollisionCheck()
         {
             // Get all the bullets that collided and get its index and type
             var hits =
@@ -345,18 +346,16 @@ namespace TeamWork.Field
         #endregion
 
         #region Music
-        private static bool playMeteorEffect; // Trigger for meteor effect
-        private static bool playEffect; // Trigger for player laser effect
-        public static bool playBossHit; // Trigger for boss hit effect
+        private static bool _playMeteorEffect; // Trigger for meteor effect
+        private static bool _playEffect; // Trigger for player laser effect
+        public static bool PlayBossHit; // Trigger for boss hit effect
         /// <summary>
         /// Load background music
         /// </summary>
         private static void LoadMusic()
         {
-            var sound = new SoundPlayer();
-            sound.SoundLocation = "Resources/STARS.wav";
+            var sound = new SoundPlayer {SoundLocation = "Resources/STARS.wav"};
             sound.PlayLooping();
-
         }
 
         /// <summary>
@@ -365,35 +364,35 @@ namespace TeamWork.Field
         private void SoundEffects()
         {
 
-            MediaPlayer soundFX = new MediaPlayer();
-            MediaPlayer soundFX2 = new MediaPlayer();
-            MediaPlayer soundFX3 = new MediaPlayer();
+            MediaPlayer soundFx = new MediaPlayer();
+            MediaPlayer soundFx2 = new MediaPlayer();
+            MediaPlayer soundFx3 = new MediaPlayer();
 
             while (true)
             {
-                if (playMeteorEffect) // If the trigger is on play the explosion effect
+                if (_playMeteorEffect) // If the trigger is on play the explosion effect
                 {
-                    soundFX.Open(new Uri("Resources/meteor.wav", UriKind.Relative));
+                    soundFx.Open(new Uri("Resources/meteor.wav", UriKind.Relative));
 
-                    soundFX.Volume = 60;
-                    soundFX.Play();
-                    playMeteorEffect = false;
+                    soundFx.Volume = 60;
+                    soundFx.Play();
+                    _playMeteorEffect = false;
                 }
-                if (playEffect) // If the trigger is on play the laser effect
+                if (_playEffect) // If the trigger is on play the laser effect
                 {
-                    soundFX2.Open(new Uri("Resources/laser.wav", UriKind.Relative));
+                    soundFx2.Open(new Uri("Resources/laser.wav", UriKind.Relative));
 
-                    soundFX2.Volume = 100;
-                    soundFX2.Play();
-                    playEffect = false;
+                    soundFx2.Volume = 100;
+                    soundFx2.Play();
+                    _playEffect = false;
                 }
-                if (playBossHit) // If the trigger is on play the laser effect
+                if (PlayBossHit) // If the trigger is on play the laser effect
                 {
-                    soundFX3.Open(new Uri("Resources/Meow.wav", UriKind.Relative));
+                    soundFx3.Open(new Uri("Resources/Meow.wav", UriKind.Relative));
 
-                    soundFX3.Volume = 100;
-                    soundFX3.Play();
-                    playBossHit = false;
+                    soundFx3.Volume = 100;
+                    soundFx3.Play();
+                    PlayBossHit = false;
                 }
                 Thread.Sleep(80);
             }
@@ -404,7 +403,7 @@ namespace TeamWork.Field
         /// <summary>
         /// Take players name
         /// </summary>
-        private void TakeName()
+        private static void TakeName()
         {
             Console.WriteLine();
             Console.Write("\n\t\t\t\t Name:");
